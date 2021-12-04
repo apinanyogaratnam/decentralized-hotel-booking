@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 contract Hotel {
+    address owner;
     enum RoomType { SINGLE, DOUBLE, SUITE }
     struct Room {
         uint price;
@@ -21,6 +22,7 @@ contract Hotel {
     Room[] public rooms;
 
     constructor () {
+        owner = msg.sender;
         numberOfSingleRooms = 15;
         numberOfDoubleRooms = 10;
         numberOfSuiteRooms = 5;
@@ -109,5 +111,11 @@ contract Hotel {
         rooms[index].start = 0;
         rooms[index].end = 0;
         rooms[index].owing = 0;
+    }
+
+    function withdraw() public {
+        require(owner == msg.sender, "You are not the owner");
+
+        payable(owner).transfer(address(this).balance);
     }
 }
