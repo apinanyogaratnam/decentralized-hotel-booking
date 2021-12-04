@@ -79,13 +79,13 @@ describe('Hotel', () => {
         await hotel.methods.pay(0).send({ from: accounts[0] });
 
         try {
-            await hotel.methods.withdraw(0).send({ from: accounts[1] });
+            await hotel.methods.withdraw().send({ from: accounts[1] });
             assert(false);
         } catch (err) {
             assert(err);
         }
 
-        await hotel.methods.withdraw(0).send({ from: accounts[0] });
+        await hotel.methods.withdraw().send({ from: accounts[0] });
         assert(true);
     });
 });
