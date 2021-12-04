@@ -61,6 +61,15 @@ describe('Hotel', () => {
     });
 
     it('can pay', async () => {
-        return;
+        await hotel.methods.bookRoom(0).send({ from: accounts[0] });
+        await hotel.methods.checkout(0).send({ from: accounts[0] });
+        await hotel.methods.pay(0).send({ from: accounts[0] });
+
+        const room = await hotel.methods.getRoom(0).call();
+        
+        assert.strictEqual(false, room.occupied);
+        assert.equal(0, room.start);
+        assert.equal(0, room.end);
+        assert.equal(0, room.owing);
     });
 });
