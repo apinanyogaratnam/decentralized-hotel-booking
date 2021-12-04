@@ -49,4 +49,18 @@ describe('Hotel', () => {
         assert.equal(true, room1[3]); // room is occupied
         assert(0 < room1[4]); // starting time is not 0
     });
+
+    it('can checkout of a room', async () => {
+        await hotel.methods.bookRoom(0).send({ from: accounts[0] });
+        await hotel.methods.checkout(0).send({ from: accounts[0] });
+
+        const room = await hotel.methods.getRoom(0).call();
+
+        assert(0 < room.start);
+        assert(0 < room.end);
+    });
+
+    it('can pay', async () => {
+        return;
+    });
 });
