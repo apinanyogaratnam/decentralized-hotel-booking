@@ -29,5 +29,5 @@ fs.ensureDirSync(buildPath);
 
 fs.outputJsonSync(
     path.resolve(buildPath, 'Hotel.json'),
-    output.contracts['Hotel.sol'].MusicList
+    output.contracts['Hotel.sol']['Hotel']
 );
