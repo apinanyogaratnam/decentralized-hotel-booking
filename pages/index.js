@@ -14,12 +14,14 @@ export default function Home() {
   
     const [rooms, setRooms] = useState([]);
 
-    useEffect(async () => {
+    const viewRooms = async () => {
+        const lst = [];
         for (let i = 0; i < 30; i++) {
             const room = await hotel.methods.getRoom(i).call();
-            setRooms([...rooms, room]);
+            lst.push(room);
         }
-    });
+        setRooms(lst);
+    };
 
     const networks = {
         rinkeby: {
@@ -91,12 +93,16 @@ export default function Home() {
             <button onClick={connectWalletHandler}>{connectionButtonText}</button>
             <button onClick={changeToRinkeby}>Change to rinkeby network</button>
             <p>{userBalance} ETH</p>
+            <button onClick={viewRooms}>View rooms</button>
             {
-                rooms.map(room => {
+                rooms.map((room, index) => {
                     return (
-                      <div>
-                        <p>Hi</p>
-                      </div>
+                        <div key={index}>
+                            <p>{room.roomNumber}</p>
+                            <p>{room.price}</p>
+                            <p>{room.typeOfRoom}</p>
+                            <p>{room.occupied ? <p>In Use</p> : <p>Available</p>}</p>
+                        </div>
                     );
                 })
             }
