@@ -100,8 +100,8 @@ export default function Home() {
                         <div key={index}>
                             <p>{room.roomNumber}</p>
                             <p>{room.price}</p>
-                            <p>{room.typeOfRoom}</p>
-                            <p>{room.occupied ? <p>In Use</p> : <p>Available</p>}</p>
+                            {room.typeOfRoom == 0 ? <p>Single</p> : room.typeOfRoom == 1 ? <p>Double</p> : <p>Suite</p>}
+                            {room.occupied ? <p>In Use</p> : <p>Available</p>}
                         </div>
                     );
                 })
