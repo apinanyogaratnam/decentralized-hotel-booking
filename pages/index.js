@@ -96,14 +96,25 @@ export default function Home() {
             <button onClick={viewRooms}>View rooms</button>
             {
                 rooms.map((room, index) => {
+                  if (room.occupied) {
                     return (
-                        <div key={index}>
+                        <div key={index} className={styles.occupied}>
                             <p>{room.roomNumber}</p>
                             <p>{room.price}</p>
                             {room.typeOfRoom == 0 ? <p>Single</p> : room.typeOfRoom == 1 ? <p>Double</p> : <p>Suite</p>}
-                            {room.occupied ? <p>In Use</p> : <p>Available</p>}
+                            <p>Occupied</p>
                         </div>
                     );
+                  } else {
+                    return (
+                        <div key={index} className={styles.vacant}>
+                            <p>{room.roomNumber}</p>
+                            <p>{room.price}</p>
+                            {room.typeOfRoom == 0 ? <p>Single</p> : room.typeOfRoom == 1 ? <p>Double</p> : <p>Suite</p>}
+                            <p>Vacant</p>
+                        </div>
+                    );
+                  }
                 })
             }
         </div>
