@@ -1,5 +1,5 @@
 import web3 from './web3';
-import MusicList from './build/Hotel.json';
+import Hotel from './build/Hotel.json';
 
 const instance = new web3.eth.Contract(
     Hotel.abi,

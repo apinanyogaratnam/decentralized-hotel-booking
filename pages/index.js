@@ -1,15 +1,25 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../styles/Home.module.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
-import Web3 from 'web3';
+import web3 from '../ethereum/web3';
+import hotel from '../ethereum/hotel';
 
 export default function Home() {
     const [errorMessage, setErrorMessage] = useState(null);
     const [defaultAccount, setDefaultAccount] = useState(null);
     const [userBalance, setUserBalance] = useState(null);
     const [connectionButtonText, setConnectionButtonText] = useState('Connect MetaMask');
+  
+    const [rooms, setRooms] = useState([]);
+
+    useEffect(async () => {
+        for (let i = 0; i < 30; i++) {
+            const room = await hotel.methods.getRoom(i).call();
+            setRooms([...rooms, room]);
+        }
+    });
 
     const networks = {
         rinkeby: {
@@ -81,6 +91,15 @@ export default function Home() {
             <button onClick={connectWalletHandler}>{connectionButtonText}</button>
             <button onClick={changeToRinkeby}>Change to rinkeby network</button>
             <p>{userBalance} ETH</p>
+            {
+                rooms.map(room => {
+                    return (
+                      <div>
+                        <p>Hi</p>
+                      </div>
+                    );
+                })
+            }
         </div>
     );
 }
