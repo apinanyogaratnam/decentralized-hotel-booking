@@ -66,7 +66,7 @@ export default function Home() {
     }
 
     const chainChangedHandler = () => {
-        window.location.reload();
+        getUserBalance(defaultAccount);
     };
 
 
