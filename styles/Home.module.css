@@ -114,3 +114,29 @@
     flex-direction: column;
   }
 }
+
+.room-container {
+  display: flex;
+  flex-direction: row;
+  width: 80%;
+  height: 100%;
+  flex-wrap: wrap;
+  margin: 0 auto;
+}
+
+.occupied {
+  background-color: #ff0000;
+}
+
+.vacant {
+  background-color: #00ff00;
+}
+
+.room {
+  border: 1px solid steelblue;
+  border-radius: 10px;
+  margin: 20px auto;
+  padding: 10px;
+  margin-right: 20px;
+  cursor: pointer;
+}

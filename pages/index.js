@@ -11,6 +11,7 @@ export default function Home() {
     const [defaultAccount, setDefaultAccount] = useState(null);
     const [userBalance, setUserBalance] = useState(null);
     const [connectionButtonText, setConnectionButtonText] = useState('Connect MetaMask');
+    const [display, setDisplay] = useState(true);
   
     const [rooms, setRooms] = useState([]);
 
@@ -21,6 +22,7 @@ export default function Home() {
             lst.push(room);
         }
         setRooms(lst);
+        setDisplay(false);
     };
 
     const networks = {
@@ -81,6 +83,26 @@ export default function Home() {
         getUserBalance(defaultAccount);
     };
 
+    const buyRoomHandler = async (index) => {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const tx = await hotel.methods.bookRoom(index).send({ from: accounts[0] });
+        console.log(tx);
+        viewRooms();
+    };
+
+    const checkoutHandler = async (index) => {
+        const accounts = await web3.eth.getAccounts();
+        const tx = await hotel.methods.checkout(index).send({ from: accounts[0] });
+        console.log(tx);
+        viewRooms();
+    };
+
+    const payHandler = async (index) => {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const tx = await hotel.methods.pay(index).send({ from: accounts[0] });
+        console.log(tx);
+        viewRooms();
+    };
 
     if (typeof window !== 'undefined') window.ethereum.on('accountsChanged', accountChangedHandler);
 
@@ -93,23 +115,26 @@ export default function Home() {
             <button onClick={connectWalletHandler}>{connectionButtonText}</button>
             <button onClick={changeToRinkeby}>Change to rinkeby network</button>
             <p>{userBalance} ETH</p>
-            <button onClick={viewRooms}>View rooms</button>
+            {display ? <button onClick={viewRooms}>View rooms</button> : null}
+            <div className={styles['room-container']}>
             {
                 rooms.map((room, index) => {
                   if (room.occupied) {
                     return (
-                        <div key={index} className={styles.occupied}>
-                            <p>{room.roomNumber}</p>
-                            <p>{room.price}</p>
+                        <div key={index} className={ styles.occupied + ' ' + styles.room }>
+                            <p> Room number: {room.roomNumber}</p>
+                            <p>Room price: {web3.utils.fromWei(room.price, 'ether')} ETH</p>
                             {room.typeOfRoom == 0 ? <p>Single</p> : room.typeOfRoom == 1 ? <p>Double</p> : <p>Suite</p>}
                             <p>Occupied</p>
+                            {room.end == 0 ? <button onClick={() => checkoutHandler(index)}>Checkout</button> : null}
+                            <button onClick={() => payHandler(index)}>Pay</button>
                         </div>
                     );
                   } else {
                     return (
-                        <div key={index} className={styles.vacant}>
-                            <p>{room.roomNumber}</p>
-                            <p>{room.price}</p>
+                        <div key={index} className={ styles.vacant + ' ' + styles.room } onClick={() => buyRoomHandler(index)}>
+                            <p>Room number: {room.roomNumber}</p>
+                            <p>Room price: {web3.utils.fromWei(room.price, 'ether')} ETH</p>
                             {room.typeOfRoom == 0 ? <p>Single</p> : room.typeOfRoom == 1 ? <p>Double</p> : <p>Suite</p>}
                             <p>Vacant</p>
                         </div>
@@ -117,6 +142,7 @@ export default function Home() {
                   }
                 })
             }
+            </div>
         </div>
     );
 }
